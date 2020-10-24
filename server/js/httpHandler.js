@@ -22,7 +22,36 @@ module.exports.randomCommand = () => {
 
 module.exports.router = (req, res, next = ()=>{}) => {
   console.log('Serving request type ' + req.method + ' for url ' + req.url);
-  res.writeHead(200, headers);
-  res.end(dequeueMessage.dequeue());
-  next(); // invoke next() at the end of a request to help with testing!
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200, headers);
+    res.end();
+  }
+  if (req.method === 'GET') {
+    if (req.url === '/') {
+      var data = dequeueMessage.dequeue() || module.exports.randomCommand();
+      res.writeHead(200, headers);
+      res.end(data);
+      next();
+    }
+    if (req.url === '/background.jpg') {
+      fs.readFile(module.exports.backgroundImageFile, (err, data) => {
+        if (err) {
+          // console.log('hellooooo')
+          res.writeHead(404, headers);
+        } else {
+
+          res.writeHead(200, headers);
+
+        }
+        res.end()
+        next();
+      })
+    }
+  }
+  if (req.method === 'POST') {
+
+  }
+
+  // next(); // invoke next() at the end of a request to help with testing!
 };
