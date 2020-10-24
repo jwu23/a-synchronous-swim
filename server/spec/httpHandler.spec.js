@@ -5,6 +5,7 @@ const expect = require('chai').expect;
 const server = require('./mockServer');
 
 const httpHandler = require('../js/httpHandler');
+const validMessages = ['left', 'right', 'up', 'down'];
 
 
 
@@ -12,7 +13,6 @@ describe('server responses', () => {
 
   it('should respond to a OPTIONS request', (done) => {
     let {req, res} = server.mock('/', 'OPTIONS');
-
     httpHandler.router(req, res);
     expect(res._responseCode).to.equal(200);
     expect(res._ended).to.equal(true);
@@ -23,6 +23,15 @@ describe('server responses', () => {
 
   it('should respond to a GET request for a swim command', (done) => {
     // write your test here
+    let {req, res} = server.mock('/', 'GET');
+    httpHandler.router(req, res);
+
+    console.log("response data", res._data.toString());
+
+    expect(res._responseCode).to.equal(200);  // 200 = request has succeeded
+    expect(res._ended).to.equal(true);
+    expect(validMessages).to.include(res._data.toString());
+
     done();
   });
 
