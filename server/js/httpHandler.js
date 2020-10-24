@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const headers = require('./cors');
 const multipart = require('./multipartUtils');
+const dequeueMessage = require('./messageQueue');
 // const keypress = require('./keypressHandler');
 const validMessages = ['left', 'right', 'up', 'down'];
 
@@ -22,6 +23,6 @@ module.exports.randomCommand = () => {
 module.exports.router = (req, res, next = ()=>{}) => {
   console.log('Serving request type ' + req.method + ' for url ' + req.url);
   res.writeHead(200, headers);
-  res.end(module.exports.randomCommand());
+  res.end(dequeueMessage.dequeue());
   next(); // invoke next() at the end of a request to help with testing!
 };

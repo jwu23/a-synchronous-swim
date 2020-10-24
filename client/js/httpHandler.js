@@ -11,7 +11,7 @@
       url: serverUrl,
       success: (data) => {
         SwimTeam.move(data);
-        setTimeout(getCommand, 10000);
+        setTimeout(getCommand, 5000);
       }
     })
   }
